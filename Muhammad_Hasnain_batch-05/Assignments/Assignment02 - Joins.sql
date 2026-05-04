@@ -2,6 +2,7 @@
 --  ASSIGNMENT 02 — Joins
 --  Database : BikeStores
 -- ============================================================
+USE BikeStores;
 
 -- ============================================================
 --  Question 1
@@ -12,7 +13,14 @@
 -- ============================================================
 
 -- Write your query below:
-
+SELECT 
+	product_name,
+	list_price,
+	category_name
+FROM production.products prd
+LEFT JOIN production.categories cat
+ON prd.category_id = cat.category_id
+ORDER BY product_name;
 
 
 -- ============================================================
@@ -24,7 +32,14 @@
 -- ============================================================
 
 -- Write your query below:
-
+SELECT 
+	cst.first_name + ' ' + cst.last_name  Full_Name,
+	ord.order_id,
+	ord.order_date
+FROM sales.customers cst
+JOIN sales.orders ord
+ON cst.customer_id = ord.customer_id
+ORDER BY ord.order_date DESC;
 
 -- ============================================================
 --  Question 3
@@ -36,7 +51,17 @@
 -- ============================================================
 
 -- Write your query below:
-
+SELECT 
+	product_name,
+	list_price,
+	category_name,
+	brand_name
+FROM production.products prd
+LEFT JOIN production.categories cat
+ON prd.category_id = cat.category_id
+LEFT JOIN  production.brands brnd
+ON prd.brand_id = brnd.brand_id
+ORDER BY brand_name,product_name;
 
 -- ============================================================
 --  Question 4
@@ -49,7 +74,15 @@
 -- ============================================================
 
 -- Write your query below:
-
+SELECT 
+	prd.product_id,
+	product_name,
+	order_id,
+	item_id
+FROM production.products prd
+LEFT JOIN sales.order_items ord_it
+ON prd.product_id = ord_it.product_id
+ORDER BY ord_it.order_id;
 
 -- ============================================================
 --  Question 5
@@ -60,7 +93,14 @@
 -- ============================================================
 
 -- Write your query below:
-
+SELECT 
+	prd.product_id,
+	product_name
+FROM production.products prd
+LEFT JOIN sales.order_items ord_it
+ON prd.product_id = ord_it.product_id
+WHERE order_id IS NULL AND item_id IS NULL
+ORDER BY ord_it.order_id;
 
 -- ============================================================
 --  Question 6
@@ -73,7 +113,14 @@
 -- ============================================================
 
 -- Write your query below:
-
+SELECT 
+	st.store_id,
+	store_name,
+	order_id,
+	order_date
+FROM sales.stores st
+LEFT JOIN sales.orders ord
+ON st.store_id = ord.store_id;
 
 
 -- ============================================================
@@ -87,7 +134,12 @@
 -- ============================================================
 
 -- Write your query below:
-
+SELECT 
+	stf.first_name + ' ' + stf.last_name as Staff_FullName,
+	mng.first_name + ' ' + mng.last_name as Mng_FullName
+FROM sales.staffs stf
+JOIN sales.staffs mng
+ON stf.manager_id = mng.staff_id;
 
 -- ============================================================
 --  Question 8
@@ -100,7 +152,12 @@
 -- ============================================================
 
 -- Write your query below:
-
+SELECT 
+	store_name,
+	brand_name
+FROM sales.stores str
+CROSS JOIN production.brands brnd;
+-- 3 * 9 = 27 rows
 
 -- ============================================================
 --  Question 9
@@ -113,4 +170,17 @@
 -- ============================================================
 
 -- Write your query below:
-
+SELECT 
+	cst.first_name + ' ' + cst.last_name Cst_FullName,
+	ord.order_id,
+	ord.order_date,
+	product_name,
+	prd.list_price
+FROM sales.customers cst
+JOIN sales.orders ord
+ON cst.customer_id = ord.customer_id
+JOIN sales.order_items ord_it
+ON ord.order_id = ord_it.order_id
+JOIN production.products prd
+ON ord_it.product_id = prd.product_id
+ORDER BY ord.order_date,Cst_FullName;
